@@ -1,4 +1,4 @@
-#!/usr/bin/env python36
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 
@@ -7,15 +7,16 @@ Created on July, 2018
 @author: Tangrizzly
 """
 
-import argparse
 import pickle
 import time
-from utils import build_graph, Data, split_validation
+
 from model import *
-from param import opt
+from param import GlobalParam
 
 
 def main():
+    opt: GlobalParam = GlobalParam().parse_known_args()[0]
+
     train_data = pickle.load(open('train.pickle', 'rb'))
     if opt.validation:
         train_data, valid_data = split_validation(train_data, opt.valid_portion)

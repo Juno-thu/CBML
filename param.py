@@ -17,6 +17,3 @@ class GlobalParam(Tap):
     valid_portion: float = 0.1  # split the portion of training set as validation set
     cluster_num: int = 16  # cluster number for soft clustering
     memory_dim: int = 0  # memory dim
-
-
-opt: GlobalParam = GlobalParam().parse_known_args()[0]

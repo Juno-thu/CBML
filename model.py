@@ -13,7 +13,7 @@ import torch.nn as nn
 from torch.autograd import Variable
 from torch.nn import functional as F
 from collections import OrderedDict
-from param import opt
+from param import GlobalParam
 
 
 class PositionEmbedding(nn.Module):
@@ -57,9 +57,9 @@ class PositionEmbedding(nn.Module):
 
 
 class Residual(Module):
-    def __init__(self):
+    def __init__(self, hidden_size):
         super().__init__()
-        self.hidden_size = 20
+        self.hidden_size = hidden_size
         self.d1 = nn.Linear(self.hidden_size, self.hidden_size, bias=True)
         self.d2 = nn.Linear(self.hidden_size, self.hidden_size, bias=True)
         self.dp = nn.Dropout(p=0.2)
@@ -174,7 +174,7 @@ class GNN(Module):
 
 
 class SessionGraph(Module):
-    def __init__(self, n_node):
+    def __init__(self, opt: GlobalParam, n_node):
         super(SessionGraph, self).__init__()
         self.cluster_num = opt.cluster_num
         self.memory_dim = opt.memory_dim
@@ -196,8 +196,8 @@ class SessionGraph(Module):
         self.linear_concat = nn.Linear(self.hidden_size, self.hidden_size, bias=True)
         self.predict = nn.Linear(self.hidden_size, self.hidden_size, bias=True)
 
-        self.rn = Residual()
-        self.rn1 = Residual()
+        self.rn = Residual(self.hidden_size)
+        self.rn1 = Residual(self.hidden_size)
         # self.dropout = nn.Dropout(p=0.2)
         self.multihead_attn = nn.MultiheadAttention(self.hidden_size, 1).cuda()
         self.multihead_attn1 = nn.MultiheadAttention(self.hidden_size, 1).cuda()
